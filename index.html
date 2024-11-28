@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets CRUD</title>
+    <script>
+        const apiBaseUrl = "http://localhost:5000/api/GoogleSheets";
+
+        async function createRow() {
+            const name = document.getElementById("name").value;
+            const age = document.getElementById("age").value;
+            const response = await fetch(`${apiBaseUrl}/create?name=${name}&age=${age}`, { method: "POST" });
+            const result = await response.text();
+            alert(result);
+        }
+
+        async function readRows() {
+            const response = await fetch(`${apiBaseUrl}/read`);
+            const data = await response.json();
+            let output = "<table border='1'><tr><th>Name</th><th>Age</th></tr>";
+            data.forEach(row => {
+                output += `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`;
+            });
+            output += "</table>";
+            document.getElementById("output").innerHTML = output;
+        }
+    </script>
+</head>
+<body>
+    <h1>Google Sheets CRUD</h1>
+    <div>
+        <input type="text" id="name" placeholder="Name">
+        <input type="text" id="age" placeholder="Age">
+        <button onclick="createRow()">Create</button>
+        <button onclick="readRows()">Read</button>
+    </div>
+    <div id="output"></div>
+</body>
+</html>
